@@ -11,7 +11,7 @@ use crate::{
     tags::TagId,
 };
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct TransactionId {
     id: String,
 }
@@ -32,14 +32,14 @@ impl<'de> Deserialize<'de> for TransactionId {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TransactionHoldInfo {
     pub amount: MoneyObject,
     #[serde(alias = "foreignAmount")]
     pub foreign_amount: MoneyObject,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TransactionAttributes {
     pub status: String,
     #[serde(alias = "rawText")]
@@ -60,41 +60,41 @@ pub struct TransactionAttributes {
     pub created_at: TimeObject,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AccountRelationship {
     pub id: AccountId,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AccountObject {
     pub data: Option<AccountRelationship>,
     pub links: Option<RelationshipsLink>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CategoryObject {
     pub data: Option<CategoryRelationship>,
     pub links: Option<RelationshipsLink>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TransactionTagsData {
     pub id: TagId,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TransactionTagLink {
     #[serde(alias = "self")]
     pub self_link: RelationLink,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TransactionTags {
     pub data: Vec<TransactionTagsData>,
     pub links: Option<TransactionTagLink>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TransactionRelationships {
     pub account: AccountObject,
     #[serde(alias = "transferAccount")]
@@ -105,7 +105,7 @@ pub struct TransactionRelationships {
     pub tags: TransactionTags,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TransactionData {
     pub id: TransactionId,
     pub attributes: TransactionAttributes,
@@ -118,7 +118,7 @@ pub struct TransactionListResponse {
     pub links: Pagination<TransactionListResponse>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TransactionResponse {
     pub data: TransactionData,
 }
@@ -139,7 +139,7 @@ impl RestPath<&PageLink<TransactionListResponse>> for TransactionListResponse {
 
 impl RestPath<&AccountId> for TransactionListResponse {
     fn get_path(par: &AccountId) -> Result<String, restson::Error> {
-        let url = String::from(format!("accounts/{}/transactions", par.id()));
+        let url = format!("accounts/{}/transactions", par.id());
         Ok(url)
     }
 }
